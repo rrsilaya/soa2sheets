@@ -1,7 +1,8 @@
 from soa2sheets.lib.bpi.parser import BpiStatementInfo, BpiTransaction
-from soa2sheets.lib.bpi.utils import Currency, Date
+from soa2sheets.lib.bpi.utils import Date
+
 from flask import Request, jsonify
-from pypdf import PdfReader, PageObject
+from pypdf import PdfReader
 
 def parse_soa(request: Request):
   if request.method != 'POST':
