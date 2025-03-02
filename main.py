@@ -19,12 +19,12 @@ def parse_soa(request: Request):
   transactions = BpiTransaction.parse_multiple(text, year=statement_info.statement_date.year)
 
   return jsonify({
-    'status': 'success',
     'account_info': {
       'customer_number': statement_info.customer_number,
       'credit_limit': statement_info.credit_limit,
     },
     'statement': {
+      'statement_for': Date.to_text(statement_info.statement_date, format='%B %Y'),
       'statement_date': Date.to_text(statement_info.statement_date),
       'due_date': Date.to_text(statement_info.due_date),
       'total_due': statement_info.total_due,

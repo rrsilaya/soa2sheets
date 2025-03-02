@@ -11,6 +11,24 @@ class Currency:
   def to_text(cls, amount: float) -> str:
     return f'{amount:,.2f}'
   
+  @classmethod
+  def to_symbol(cls, text: Optional[str]) -> str:
+    if not text:
+      return 'PHP'
+
+    symbol = text.replace(' ', '')
+
+    if symbol == 'Yen':
+      return 'JPY'
+    if symbol == 'Baht':
+      return 'THB'
+    if symbol == 'Euro':
+      return 'EUR'
+    if symbol == 'U.S.Dollar':
+      return 'USD'
+    
+    return symbol
+  
 class Date:
   @classmethod
   def to_datetime(cls, text: str, format = '%B %d,%Y') -> datetime:

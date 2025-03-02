@@ -95,6 +95,28 @@ class BpiTransaction(SimpleNamespace):
       'sip_terms': self.sip_terms,
       'amortization': self.amortization,
     }
+  
+  @classmethod
+  def _get_transaction_data(cls, match: re.Match) -> dict:
+    date_format = '%B %d'
+
+    sip_terms = match.group('sip_terms') or match.group('amortization').split('/')[1] if match.group('amortization') else None
+    amortization = match.group('amortization').split('/')[0] if match.group('amortization') else None
+
+    return {
+      'type': TransactionType.get_type(match),
+      'transaction_date': Date.to_datetime(match.group('txn_date'), format=date_format),
+      'posting_date': Date.to_datetime(match.group('posting_date'), format=date_format),
+
+      'description': match.group('name'),
+
+      'currency': Currency.to_symbol(match.group('currency')),
+      'original_amount': Currency.to_float(match.group('original_amount')),
+      'amount': Currency.to_float(match.group('amount')),
+
+      'sip_terms': int(sip_terms) if sip_terms else None,
+      'amortization': int(amortization) if amortization else None,
+    }
 
   # param {year: Optional[int]} - statement year
   @classmethod
@@ -111,25 +133,8 @@ class BpiTransaction(SimpleNamespace):
       f'\s+(?P<amount>{AMOUNT_REGEX})' # Amount
     )
 
-    date_format = '%B %d'
-
     matches = re.compile(''.join(txn_regex)).finditer(text)
-    transactions = [
-      {
-        'type': TransactionType.get_type(match),
-        'transaction_date': Date.to_datetime(match.group('txn_date'), format=date_format),
-        'posting_date': Date.to_datetime(match.group('posting_date'), format=date_format),
-
-        'description': match.group('name'),
-
-        'currency': Currency.to_float(match.group('original_amount')),
-        'original_amount': Currency.to_float(match.group('original_amount')),
-        'amount': Currency.to_float(match.group('amount')),
-
-        'sip_terms': match.group('sip_terms'),
-        'amortization': match.group('amortization'),
-      } for match in matches
-    ]
+    transactions = [cls._get_transaction_data(match) for match in matches]
 
     # If year is provided, we override the dates so we have more accurate dates
     if year:
