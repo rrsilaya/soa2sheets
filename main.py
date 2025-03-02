@@ -4,8 +4,9 @@ from soa2sheets.lib.bpi.utils import Date
 from flask import Request, jsonify
 from pypdf import PdfReader
 
-import requests
+import requests, functions_framework
 
+@functions_framework.http
 def parse_soa(request: Request):
   if request.method != 'POST':
     return jsonify({ 'error': 'Method not allowed' }), 405
