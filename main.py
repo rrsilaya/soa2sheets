@@ -31,7 +31,7 @@ def parse_soa(request: Request):
       'credit_limit': statement_info.credit_limit,
     },
     'statement': {
-      'statement_for': Date.to_text(statement_info.statement_date, format='%B %Y'),
+      'statement_for': Date.to_text(statement_info.statement_date.replace(month=statement_info.statement_date.month - 1), format='%B %Y'),
       'statement_date': Date.to_text(statement_info.statement_date),
       'due_date': Date.to_text(statement_info.due_date),
       'total_due': statement_info.total_due,
