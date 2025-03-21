@@ -126,7 +126,7 @@ class BpiTransaction(SimpleNamespace):
       f'(?P<posting_date>({MONTH_REGEX})\s*(\d{{1,2}}))\s+', # Posting date
       '(?P<name>.+?)', # Transaction name
 
-      f'(\n(?P<currency>[A-Za-z\.]+)\s+(?P<original_amount>{AMOUNT_REGEX}))?', # Foreign currency
+      f'(\n(?P<currency>[A-Za-z\.\s]+)\s+(?P<original_amount>{AMOUNT_REGEX}))?', # Foreign currency
       f'(\s*{SIP_REGEX}?:\((?P<sip_terms>\d{{1,2}})Mos\.\))?', # SIP terms
       f'(\s*{SIP_REGEX}?:(?P<amortization>\d{{2}}\/\d{{2}}))?', # Amortization
 

@@ -26,6 +26,8 @@ class Currency:
       return 'EUR'
     if symbol == 'U.S.Dollar':
       return 'USD'
+    if symbol == 'NewTaiwanDollar':
+      return 'TWD'
     
     return symbol
   
